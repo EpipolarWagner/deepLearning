@@ -13,7 +13,7 @@ from six.moves.urllib.request import urlretrieve
 from six.moves import cPickle as pickle
 
 # Config the matplotlib backend as plotting inline in IPython
-%matplotlib inline
+#%matplotlib inline
 print(2+2)
 
 data_root = '.'
@@ -35,15 +35,13 @@ y_test = letter_class['test_labels']
 from sklearn.linear_model import LogisticRegression
 
 # Instantiate
-lg = LogisticRegression(multi_class='multinomial', solver='lbfgs', random_state=42, verbose=1, max_iter=1000, n_jobs=-1)
-#lg=LogisticRegression(penalty='l2', dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver='liblinear', max_iter=100, multi_class='ovr', verbose=0, warm_start=False, n_jobs=1)
+#lg = LogisticRegression(multi_class='multinomial', solver='lbfgs', random_state=42, verbose=1, max_iter=1000, n_jobs=-1)
+lg=LogisticRegression(penalty='l2', dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver='liblinear', max_iter=100, multi_class='ovr', verbose=0, warm_start=False, n_jobs=1)
 # Fit
 lg.fit(X_train, y_train)
 
-#[if True == np.array_equal(picture_train,picture_valid) for picture_train in train_dataset[1:100] for picture_valid in valid_dataset[1:100]]
+y_pred = lg.predict(X_test)
 
-pickle_file = os.path.join(data_root, 'notMNIST.pickle')
-pickle_file
-#f = open(pickle_file, 'rb')
-with open(pickle_file,'rb') as opn:
-    letter_class=pickle.load(opn)
+# Score
+from sklearn import metrics
+print(metrics.accuracy_score(y_test, y_pred))
