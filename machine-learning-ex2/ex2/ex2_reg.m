@@ -65,12 +65,11 @@ lambda = 1;
 
 % Compute and display initial cost and gradient for regularized logistic
 % regression
-[cost, grad] = costFunctionReg(initial_theta, X, y, lambda);
 
 fprintf('Cost at initial theta (zeros): %f\n', cost);
 fprintf('Expected cost (approx): 0.693\n');
 fprintf('Gradient at initial theta (zeros) - first five values only:\n');
-fprintf(' %f \n', grad(1:5));
+
 fprintf('Expected gradients (approx) - first five values only:\n');
 fprintf(' 0.0085\n 0.0188\n 0.0001\n 0.0503\n 0.0115\n');
 
@@ -113,8 +112,7 @@ lambda = 1;
 options = optimset('GradObj', 'on', 'MaxIter', 400);
 
 % Optimize
-[theta, J, exit_flag] = ...
-	fminunc(@(t)(costFunctionReg(t, X, y, lambda)), initial_theta, options);
+[theta, J, exit_flag] = fminunc(@(t)(costFunctionReg(t, X, y, lambda)), initial_theta, options);
 
 % Plot Boundary
 plotDecisionBoundary(theta, X, y);

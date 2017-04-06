@@ -10,7 +10,7 @@ function plotDecisionBoundary(theta, X, y)
 
 % Plot Data
 plotData(X(:,2:3), y);
-hold on
+hold on;
 
 if size(X, 2) <= 3
     % Only need 2 points to define a line, so choose two endpoints
@@ -43,6 +43,6 @@ else
     % Notice you need to specify the range [0, 0]
     contour(u, v, z, [0, 0], 'LineWidth', 2)
 end
-hold off
+hold off;
 
 end
