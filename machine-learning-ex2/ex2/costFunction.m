@@ -19,8 +19,8 @@ m = length(y); % number of training examples
 %
 lambda=0;
 h=sigmoid(X*theta);
-J=1/m*(-y'*log(h)-(1-y)'*log(1-h))+lambda/(2*m)sum(theta(2:end).^2);
-grad=1/m*X*(h-y)+lambda/m*[0;theta(2:end)];
+J=1/m*(-y'*log(h)-(1-y)'*log(1-h))+lambda/(2*m)*sum(theta(2:end).^2);
+grad=1/m*X'*(h-y)+lambda/m*[0;theta(2:end)];
   
 
 

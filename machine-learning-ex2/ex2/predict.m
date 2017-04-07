@@ -16,12 +16,13 @@ p = zeros(m, 1);
 %
 h=sigmoid(X*theta);
 
-if (h >= 0.5)
-  p=1;
-else
-  p=0;
-endif
-
+for i=1:length(h)
+  if (h(i) >= 0.5)
+    p(i)=1;
+  else
+    p(i)=0;
+  endif
+end
 
 
 
