@@ -23,13 +23,13 @@ Theta{2} = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):
                  num_labels, (hidden_layer_size + 1));
 
 % Setup some useful variables
-m(1) = size(X, 1);
+m = size(X, 1);
          
 % You need to return the following variables correctly 
 J = 0;
-Theta1_grad = zeros(size(Theta1));
-Theta2_grad = zeros(size(Theta2));
-X=[ones(m, 1) X];
+Theta1_grad = zeros(size(Theta{1}));
+Theta2_grad = zeros(size(Theta{2}));
+a{1}=X;
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the code by working through the
 %               following parts.
@@ -62,23 +62,36 @@ X=[ones(m, 1) X];
 %               and Theta2_grad from Part 2.
 %
 
-for i=1:2
-  XHom=sigmoid(XHom*Theta{i}');
-  X=[ones(m(i), 1) X];
+for i=2:size(Theta,2)+1
+  a{i-1}=[ones(size(a{i-1},1), 1) a{i-1}];
+  z{i}=a{i-1}*Theta{i-1}';
+  a{i}=sigmoid(z{i});
 end
-J=1/m*(-y'*log(h)-(1-y)'*log(1-h))+lambda/(2*m)*sum(theta(2:end).^2);
+sizey=size(y);
+yVec=sparse(sizey(1),num_labels);
+for i=1:sizey(1)
+  yVec(i,:)=sparse((1:num_labels==y(i)));
+end
+
+%J=1/m*(-y'*log(Xhom)-(1-y)'*log(1-Xhom))%+lambda/(2*m)*sum(theta(2:end).^2);
 
 
+J=1/m*sum(-dot(yVec,log(a{3}))-dot((1-yVec),log(1-a{3})))%+lambda/(2*m)*sum(nn_params.^2);
+reg=0
+for i = 1:size(Theta,2)
+  reg=reg+sum(sum(Theta{i}(:,2:end).^2));
+end
+J=J+lambda/(2*m)*reg;
 
+delta{3}=a{3}-yVec
+delta{2}=((delta{3}*Theta{2})(:,2:end)).*sigmoidGradient(z{2})
 
+Delta{1} = delta{1+1}*a{1}'
+Delta{2} = delta{2+1}*a{2}'
 
-
-
-
-
-
-
-
+D{2}=1/m*Delta{2}
+D{1}=1/m*Delta{1}
+  
 
 
 
@@ -88,7 +101,7 @@ J=1/m*(-y'*log(h)-(1-y)'*log(1-h))+lambda/(2*m)*sum(theta(2:end).^2);
 % =========================================================================
 
 % Unroll gradients
-grad = [Theta1_grad(:) ; Theta2_grad(:)];
+grad = [Delta{1}(:) ; D{2}(:)];
 
 
 end
