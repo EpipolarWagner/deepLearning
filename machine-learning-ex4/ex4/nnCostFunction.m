@@ -76,23 +76,22 @@ end
 %J=1/m*(-y'*log(Xhom)-(1-y)'*log(1-Xhom))%+lambda/(2*m)*sum(theta(2:end).^2);
 
 
-J=1/m*sum(-dot(yVec,log(a{3}))-dot((1-yVec),log(1-a{3})))%+lambda/(2*m)*sum(nn_params.^2);
-reg=0
+J=1/m*sum(-dot(yVec,log(a{3}))-dot((1-yVec),log(1-a{3})));%+lambda/(2*m)*sum(nn_params.^2);
+reg=0;
 for i = 1:size(Theta,2)
   reg=reg+sum(sum(Theta{i}(:,2:end).^2));
 end
 J=J+lambda/(2*m)*reg;
 
-delta{3}=a{3}-yVec
-delta{2}=((delta{3}*Theta{2})(:,2:end)).*sigmoidGradient(z{2})
+delta{3}=a{3}-yVec;
+delta{2}=((delta{3}*Theta{2})(:,2:end)).*sigmoidGradient(z{2});
 
-Delta{1} = delta{1+1}*a{1}'
-Delta{2} = delta{2+1}*a{2}'
+Delta{1} = delta{1+1}'*a{1};
+Delta{2} = delta{2+1}'*a{2};
 
-D{2}=1/m*Delta{2}
-D{1}=1/m*Delta{1}
   
-
+Theta1_grad = 1/m*Delta{1}+(lambda/m)*[zeros(size(Theta{1},1),1) Theta{1}(:,2:end)];
+Theta2_grad = 1/m*Delta{2}+(lambda/m)*[zeros(size(Theta{2},1),1) Theta{2}(:,2:end)];
 
 
 
@@ -101,7 +100,7 @@ D{1}=1/m*Delta{1}
 % =========================================================================
 
 % Unroll gradients
-grad = [Delta{1}(:) ; D{2}(:)];
+grad = [Theta1_grad(:); Theta2_grad(:)];
 
 
 end
